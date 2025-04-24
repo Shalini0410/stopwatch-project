@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .stopwatch-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 40px 50px;
+            border-radius: 20px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        #time {
+            font-size: 5rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 5px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(255, 107, 107, 0.4);
+        }
+
+        button:hover {
+            background-color: #ff4f4f;
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(255, 79, 79, 0.6);
+        }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 8px 20px rgba(255, 79, 79, 0.4);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="stopwatch-container">
+    <div id="time">00:00:00</div>
+    <div class="button-container">
+        <button id="startStop">Start</button>
+        <button id="reset">Reset</button>
+    </div>
+</div>
+
+<script>
+    let timer;
+    let isRunning = false;
+    let seconds = 0;
+    let minutes = 0;
+    let hours = 0;
+
+    const timeDisplay = document.getElementById('time');
+    const startStopButton = document.getElementById('startStop');
+    const resetButton = document.getElementById('reset');
+
+    function updateTime() {
+        seconds++;
+        if (seconds >= 60) {
+            seconds = 0;
+            minutes++;
+            if (minutes >= 60) {
+                minutes = 0;
+                hours++;
+            }
+        }
+        timeDisplay.textContent = `${formatTime(hours)}:${formatTime(minutes)}:${formatTime(seconds)}`;
+    }
+
+    function formatTime(unit) {
+        return unit < 10 ? `0${unit}` : unit;
+    }
+
+    function toggleStartStop() {
+        if (isRunning) {
+            clearInterval(timer);
+            startStopButton.textContent = 'Start';
+        } else {
+            timer = setInterval(updateTime, 1000);
+            startStopButton.textContent = 'Stop';
+        }
+        isRunning = !isRunning;
+    }
+
+    function resetStopwatch() {
+        clearInterval(timer);
+        isRunning = false;
+        seconds = 0;
+        minutes = 0;
+        hours = 0;
+        timeDisplay.textContent = '00:00:00';
+        startStopButton.textContent = 'Start';
+    }
+
+    startStopButton.addEventListener('click', toggleStartStop);
+    resetButton.addEventListener('click', resetStopwatch);
+</script>
+
+</body>
+</html>
